@@ -41,3 +41,6 @@ Transliteration can be done with those tables
  + Загранпаспорт (1997—2010)
  + Международные телеграммы
  + Научная
+
+All this tables has been taken from `<http://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей>`_
+except 'py trans'.
