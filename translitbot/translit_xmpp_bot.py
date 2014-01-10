@@ -2,7 +2,7 @@
 # -*- mode: python; coding: utf-8 -*-
 # (c) Valik mailto:vasnake@gmail.com
 
-u''' GTalk bot for translit rus texts using set of encode tables.
+u''' Translitbot is XMPP bot for translit rus texts using set of encode tables.
 You can add translit.bot@gmail.com to your XMPP or GTalk roster and talk to him.
 
 Tables taken from wiki: Транслитерация русского алфавита латиницей
@@ -22,8 +22,8 @@ valik@snafu:~/translit.bot$ source env/bin/activate
 (env)valik@snafu:~/translit.bot$ unzip -j master.zip
 
 Run
-$ export TRANSBOT_PASSWORD='your secret'
 $ export TRANSBOT_USER='your gtalk acc@gmail.com'
+$ export TRANSBOT_PASSWORD='your secret'
 $ python translit_xmpp_bot.py
 
 
@@ -32,15 +32,29 @@ http://habrahabr.ru/post/137089/
 http://www.linuxforu.com/2012/06/use-xmpp-to-create-your-own-google-talk-client/
 http://rus-linux.net/MyLDP/algol/xmpp-to-create-google-talk-client.html
 
-Copyright (C) 2014, Valentin Fedulov
-Originally by Valik <vasnake@gmail.com>, 2012
-Licensed under GNU GENERAL PUBLIC LICENSE (http://www.gnu.org/licenses/gpl.txt)
+
+Copyright 2012-2014 Valentin Fedulov
+
+This file is part of Translitbot.
+
+Translitbot is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Translitbot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Translitbot. If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import sys, os, xmpp, string, time, traceback
-import enc
+import translitbot.enc as enc
 
-USER = os.environ.get("TRANSBOT_USER", "translit.bot@gmail.com")
+USER = os.environ.get("TRANSBOT_USER", "google account name@gmail.com")
 PASSWORD = os.environ.get("TRANSBOT_PASSWORD", "google account passphrase")
 SERVER = "gmail.com"
 
@@ -124,6 +138,9 @@ def connect():
     print 'conn.connect() is', res
     res = conn.auth(jid.getNode(), PASSWORD, "console")
     print 'conn.auth() is', res
+    if res is None:
+        print "invalid login?"
+        return res
 
     conn.RegisterHandler('message', messageHandler)
     conn.RegisterHandler('presence',presenceHandler)
@@ -137,7 +154,7 @@ def main():
     """ infinite loop """
     try:
         conn = connect()
-        while conn.Process(1):
+        while conn and conn.Process(1):
             pass
     except (KeyboardInterrupt, SystemExit):
         print u'shutdown...'
@@ -146,7 +163,8 @@ def main():
         print u'xmpp exception, restart after pause...'
         traceback.print_exc(file=sys.stderr)
     # loop
-    time.sleep(17)
+    print u"will wait and try again..."
+    time.sleep(61)
     main()
 #def main():
 
@@ -166,8 +184,7 @@ def doDocTest():
 if __name__ == "__main__":
     print time.strftime('%Y-%m-%d %H:%M:%S')
     try:
-        #~ doDocTest()
-        main()
+        doDocTest()
         print 'Done.'
     except Exception, e:
         print 'Error, program failed:'
