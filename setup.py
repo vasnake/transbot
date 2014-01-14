@@ -1,4 +1,7 @@
-# coding: utf8
+#!/usr/bin/env python
+# -*- mode: python; coding: utf-8 -*-
+# Copyright (c) Valentin Fedulov <vasnake@gmail.com>
+# See COPYING for details.
 
 from distutils.core import setup
 import enc
