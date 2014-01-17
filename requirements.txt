@@ -1,0 +1,5 @@
+argparse==1.2.1
+dnspython==1.11.1
+trans==1.5.1
+wsgiref==0.1.2
+xmpppy==0.5.0rc1

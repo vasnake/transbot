@@ -1,5 +1,6 @@
 t/
 env/
+translitbot.egg-info/
 
 *.pyc
 *.pyo
