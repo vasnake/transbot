@@ -24,7 +24,7 @@ valik@snafu:~/translit.bot$ source env/bin/activate
 Run
 $ export TRANSBOT_USER='your gtalk acc@gmail.com'
 $ export TRANSBOT_PASSWORD='your secret'
-$ python translit_xmpp_bot.py
+$ python -m translitbot
 
 
 links
@@ -134,8 +134,10 @@ def connect():
     #~ conn = xmpp.Client(SERVER)
     conn = xmpp.Client(SERVER, debug=[])
 
+    print 'connect ...'
     res = conn.connect()
     print 'conn.connect() is', res
+
     res = conn.auth(jid.getNode(), PASSWORD, "console")
     print 'conn.auth() is', res
     if res is None:

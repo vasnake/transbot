@@ -1,5 +1,1 @@
-include setup.cfg
-include README.rst
-include CHANGELOG
-include COPYING
-include requirements.txt
+include README.rst CHANGELOG COPYING requirements.txt

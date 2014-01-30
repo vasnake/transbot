@@ -10,7 +10,7 @@ with open('README.rst', 'r') as infile:
 
 setup(
     name = 'translitbot',
-    description = "Translit XMPP chat bot",
+    description = "XMPP chat bot for translit service",
     long_description = long_description,
     keywords = "XMPP GTalk chat bot translit",
     url = 'https://github.com/vasnake/transbot',
