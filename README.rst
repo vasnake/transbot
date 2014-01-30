@@ -9,19 +9,32 @@ The list of encode tables available by ':help' command.
 
 Usage
 ------------
+
+Install package using setuptools, virtualenv
+    ``python setup.py install``
+    or
+    ``pip install translitbot``
+
 Change account settings in the file translit_xmpp_bot.py::
 
   USER = "translit.bot@gmail.com"
   PASSWORD = "google accaunt passphrase"
   SERVER = "gmail.com"
-  
+
+or set environment vars for using GTalk account::
+
+    export TRANSBOT_USER='bot name@gmail.com'
+    export TRANSBOT_PASSWORD='secret'
+
 and start bot::
 
-  python ./translit_xmpp_bot.py
+  python -m translitbot
 
-Or use module enc.py
-  >>> import enc
-  >>> outStr = enc.translit(inStr, enc.ISO9MODEA)
+Or you can just use module enc.py in your code::
+
+  >>> import translitbot.enc as enc
+  >>> inStr = u'опля'
+  >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
 
 Or make chat with my bot 'translit.bot@gmail.com'
 
