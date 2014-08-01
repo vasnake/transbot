@@ -16,7 +16,7 @@ Install package using setuptools, virtualenv::
 
     mkdir transbot
     cd transbot
-    virtualenv env
+    virtualenv --python=python2.7 env
     source env/bin/activate
     wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
     pip install ./xmpppy-0.5.0rc1.tar.gz
@@ -39,19 +39,27 @@ or set environment vars for using GTalk account::
 
 and start bot::
 
-  python -m translitbot
+    python -m translitbot
 
 Or you can just use module enc.py in your code::
 
-  >>> import translitbot.enc as enc
-  >>> inStr = u'опля'
-  >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
+    ```python
+    >>> import translitbot.enc as enc
+    >>> inStr = u'опля'
+    >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
+    ```
 
 Or make chat with my bot `xmpp:translit.bot@gmail.com`
+
+For detaching program from console (daemon mode) you can use screen command.
+For example
+
+    screen -d -R transbot
 
 Encoders
 --------
 Transliteration can be done with those tables
+
  + py trans https://github.com/zzzsochi/trans
  + ALA-LC
  + BGN/PCGN (1944)

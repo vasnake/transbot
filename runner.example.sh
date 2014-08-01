@@ -29,7 +29,7 @@ createVirtualenv() {
     pushd "${PROJECT_DIR}"
     sudo curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python -
     sudo pip install virtualenv
-    virtualenv env
+    virtualenv --python=python2.7 env
 }
 
 makeSourceDistribution() {
@@ -41,6 +41,8 @@ makeSourceDistribution() {
 installDevelop() {
     pushd "${PROJECT_DIR}"
     source env/bin/activate
+    wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
+    pip install ./xmpppy-0.5.0rc1.tar.gz
     python setup.py develop
 }
 
