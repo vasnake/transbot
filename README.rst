@@ -5,6 +5,8 @@ The **translit** xmpp bot
 This xmpp bot converts russian text into latin script (transliteration).
 The list of encode tables available by ':help' command.
 
+Tested on Python 2.7
+
 .. contents::
 
 Usage
