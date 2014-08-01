@@ -27,7 +27,7 @@ Install package using setuptools, virtualenv::
 Change account settings in the file translit_xmpp_bot.py::
 
     USER = "translit.bot@gmail.com"
-    PASSWORD = "google accaunt passphrase"
+    PASSWORD = "google account passphrase"
     SERVER = "gmail.com"
 
 or set environment vars for using GTalk account::
@@ -43,11 +43,11 @@ and start bot::
 
 Or you can just use module enc.py in your code::
 
-    ```python
-    >>> import translitbot.enc as enc
-    >>> inStr = u'опля'
-    >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
-    ```
+```python
+>>> import translitbot.enc as enc
+>>> inStr = u'опля'
+>>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
+```
 
 Or make chat with my bot `xmpp:translit.bot@gmail.com`
 
