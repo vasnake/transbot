@@ -56,7 +56,7 @@ import translitbot.enc as enc
 
 USER = os.environ.get("TRANSBOT_USER", "google account name@gmail.com")
 PASSWORD = os.environ.get("TRANSBOT_PASSWORD", "google account passphrase")
-SERVER = "gmail.com"
+SERVER = os.environ.get("TRANSBOT_SERVER", "gmail.com")
 
 CP = 'utf-8'
 

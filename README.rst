@@ -13,7 +13,7 @@ Usage
 Install package using setuptools, virtualenv
     ``python setup.py install``
     or
-    ``pip install translitbot``
+    ``pip install git+git://github.com/vasnake/transbot.git@master``
 
 Change account settings in the file translit_xmpp_bot.py::
 
