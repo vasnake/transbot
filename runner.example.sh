@@ -27,6 +27,8 @@ runBot() {
 
 createVirtualenv() {
     pushd "${PROJECT_DIR}"
+    sudo curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python -
+    sudo pip install virtualenv
     virtualenv env
 }
 

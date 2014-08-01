@@ -17,7 +17,7 @@ valik@snafu:~/translit.bot$ source env/bin/activate
 (env)valik@snafu:~/translit.bot$ cd xmpppy-0.5.0rc1/
 (env)valik@snafu:~/translit.bot/xmpppy-0.5.0rc1$ ../env/bin/python setup.py install
 (env)valik@snafu:~/translit.bot$ cd ..
-(env)valik@snafu:~/translit.bot$ pip install trans dnspython
+(env)valik@snafu:~/translit.bot$ pip install trans dnspython pydns
 (env)valik@snafu:~/translit.bot$ wget https://github.com/vasnake/transbot/archive/master.zip
 (env)valik@snafu:~/translit.bot$ unzip -j master.zip
 

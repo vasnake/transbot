@@ -2,29 +2,38 @@
 The **translit** xmpp bot
 =========================
 
-This xmpp bot converts Russian text into Latin script (transliteration).
+This xmpp bot converts russian text into latin script (transliteration).
 The list of encode tables available by ':help' command.
 
 .. contents::
 
 Usage
-------------
+-----
 
-Install package using setuptools, virtualenv
-    ``python setup.py install``
-    or
-    ``pip install git+git://github.com/vasnake/transbot.git@master``
+Install package using setuptools, virtualenv::
+
+    mkdir transbot
+    cd transbot
+    virtualenv env
+    source env/bin/activate
+    wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
+    pip install ./xmpppy-0.5.0rc1.tar.gz
+    pip install git+git://github.com/vasnake/transbot.git@master
+    # or download package and exec
+    python setup.py install
 
 Change account settings in the file translit_xmpp_bot.py::
 
-  USER = "translit.bot@gmail.com"
-  PASSWORD = "google accaunt passphrase"
-  SERVER = "gmail.com"
+    USER = "translit.bot@gmail.com"
+    PASSWORD = "google accaunt passphrase"
+    SERVER = "gmail.com"
 
 or set environment vars for using GTalk account::
 
     export TRANSBOT_USER='bot name@gmail.com'
     export TRANSBOT_PASSWORD='secret'
+    export TRANSBOT_SERVER='gmail.com'
+    export PYTHONIOENCODING=UTF-8
 
 and start bot::
 
