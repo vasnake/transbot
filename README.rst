@@ -43,11 +43,9 @@ and start bot::
 
 Or you can just use module enc.py in your code::
 
-    ```
     >>> import translitbot.enc as enc
     >>> inStr = u'опля'
     >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
-    ```
 
 Or make chat with my bot `xmpp:translit.bot@gmail.com`
 
