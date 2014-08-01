@@ -47,7 +47,7 @@ Or you can just use module enc.py in your code::
   >>> inStr = u'опля'
   >>> outStr = enc.translit(inStr, enc.DRIVELICMODE)
 
-Or make chat with my bot 'translit.bot@gmail.com'
+Or make chat with my bot xmpp:translit.bot@gmail.com
 
 Encoders
 --------
