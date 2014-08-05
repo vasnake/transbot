@@ -54,6 +54,11 @@ For example::
 
     screen -d -R transbot
 
+TODO
+----
+
+Shift to SleekXMPP.
+
 Encoders
 --------
 Transliteration can be done with those tables
