@@ -41,8 +41,8 @@ makeSourceDistribution() {
 installDevelop() {
     pushd "${PROJECT_DIR}"
     source env/bin/activate
-    wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
-    pip install ./xmpppy-0.5.0rc1.tar.gz
+    #~ wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
+    #~ pip install ./xmpppy-0.5.0rc1.tar.gz
     python setup.py develop
 }
 

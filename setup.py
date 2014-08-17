@@ -21,7 +21,7 @@ setup(
     author_email='vasnake@gmail.com',
     packages = ['translitbot'],
     scripts = [],
-    install_requires = ['pydns', 'dnspython', 'trans', 'xmpppy'],
+    install_requires = ['pydns', 'dnspython', 'trans', 'sleekxmpp'],
     classifiers = [ # https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

@@ -12,12 +12,7 @@ Install example
 valik@snafu:~$ mkdir ~/translit.bot; pushd ~/translit.bot
 valik@snafu:~/translit.bot$ virtualenv --no-site-packages env
 valik@snafu:~/translit.bot$ source env/bin/activate
-(env)valik@snafu:~/translit.bot$ wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
-(env)valik@snafu:~/translit.bot$ tar -xzvvf xmpppy-0.5.0rc1.tar.gz
-(env)valik@snafu:~/translit.bot$ cd xmpppy-0.5.0rc1/
-(env)valik@snafu:~/translit.bot/xmpppy-0.5.0rc1$ ../env/bin/python setup.py install
-(env)valik@snafu:~/translit.bot$ cd ..
-(env)valik@snafu:~/translit.bot$ pip install trans dnspython pydns
+(env)valik@snafu:~/translit.bot$ pip install trans dnspython pydns sleekxmpp
 (env)valik@snafu:~/translit.bot$ wget https://github.com/vasnake/transbot/archive/master.zip
 (env)valik@snafu:~/translit.bot$ unzip -j master.zip
 
@@ -51,7 +46,14 @@ You should have received a copy of the GNU General Public License
 along with Translitbot. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, os, xmpp, string, time, traceback
+import sys
+import os
+import string
+import time
+import traceback
+
+import sleekxmpp
+
 import translitbot.enc as enc
 
 USER = os.environ.get("TRANSBOT_USER", "google account name@gmail.com")
@@ -85,85 +87,104 @@ def getTransKey(transname):
 #def getTransKey(inStr):
 
 
-def messageHandler(sess, stanza):
-    """ Process messages """
-    def send(msg):
-        sess.send(xmpp.Message(stanza.getFrom(), msg))
-        print ("bot resp. '%s'" % msg).encode(CP)
+def makeResponce(userName, inStr):
+    """Return responce (string) to input message inStr for user userName.
+    """
+    res = u''
 
-    fromUser = stanza.getFrom().getStripped()
-    inStr = (u'%s' % stanza.getBody()).strip()
+    userName, inStr = (userName.strip(), inStr.strip())
+    print(u"user '%s' say '%s'" % (userName, inStr))
 
+    # empty input
     if not inStr or inStr.lower() == u'none':
-        return
-    print (u"user '%s' say '%s'" % (fromUser, inStr)).encode(CP)
+        return res
 
+    # help commands
     if inStr == u'?' or inStr.lower() == u'help' or inStr.lower() == u':help':
-        send(usage())
-        return
+        res = usage()
+        return res
 
+    # set mode command
     if inStr[0] == u':':
         mode = getTransKey(inStr[1:])
         if mode:
-            MODES[fromUser] = mode
-            send(u"Установлен режим транслитерации по методу '%s'" % mode[0])
-            return
-        send(u"Незнакомая команда '%s'" % inStr)
+            MODES[userName] = mode
+            res = u"Установлен режим транслитерации по методу '%s'" % mode[0]
+            return res
+        else:
+            res = u"Незнакомая команда '%s'" % inStr
+            return res
 
-    mode = MODES.get(fromUser, enc.DRIVELICMODE)
+    # translit text
+    mode = MODES.get(userName, enc.DRIVELICMODE)
     outStr = enc.translit(inStr, mode)
-    message = u"Mode '%s', answer is:\n%s" % (mode[0], outStr)
-    send(message)
-#def messageHandler(sess, stanza):
+    res = u"Mode '%s', answer is:\n%s" % (mode[0], outStr)
+    return res
+#def makeResponce(userName, inStr):
 
 
-def presenceHandler(conn, pres):
-    """ subscribe or unsubscribe processor """
-    type=pres.getType()
-    user=pres.getFrom()
-    if type=='subscribe':
-        conn.send(xmpp.Presence(user,'subscribed'))
-    if type=='unsubscribe':
-        conn.send(xmpp.Presence(user,'unsubscribed'))
-#def presenceHandler(conn, pres):
+class TranslitBot(sleekxmpp.ClientXMPP):
+    """A simple SleekXMPP chat bot that will translit messages it receives.
+    """
+
+    def __init__(self, jid, password):
+        sleekxmpp.ClientXMPP.__init__(self, jid, password)
+
+        self.add_event_handler("session_start", self.start)
+        self.add_event_handler("message", self.message)
+
+        # https://github.com/fritzy/SleekXMPP/wiki/Roster-Management
+        self.auto_authorize = True
+        self.auto_subscribe = True
 
 
-def connect():
-    """ Return connect from xmpp.Client() """
-    jid = xmpp.JID(USER)
-    #~ conn = xmpp.Client(SERVER)
-    conn = xmpp.Client(SERVER, debug=[])
+    def start(self, event):
+        self.send_presence()
+        self.get_roster()
 
-    print 'connect ...'
-    res = conn.connect()
-    print 'conn.connect() is', res
-
-    res = conn.auth(jid.getNode(), PASSWORD, "console")
-    print 'conn.auth() is', res
-    if res is None:
-        print "invalid login?"
-        return res
-
-    conn.RegisterHandler('message', messageHandler)
-    conn.RegisterHandler('presence',presenceHandler)
-    conn.sendInitPresence()
-
-    return conn
-#def connect():
+    def message(self, msg):
+        try:
+            print(u"\n message type '%s'" % msg['type'])
+            if msg['type'] in ('chat', 'normal'):
+                print("make responce...")
+                resp = makeResponce(u'%s' % msg['from'], u'%s' % msg['body'])
+                if resp:
+                    print(u"responce is '%s'" % resp)
+                    msg.reply(resp).send()
+                else:
+                    print(u"responce is empty")
+            else:
+                print("service message, skip it")
+        except:
+            print u'TranslitBot.messge failed:'
+            traceback.print_exc(file=sys.stderr)
+#class TranslitBot(sleekxmpp.ClientXMPP):
 
 
 def main():
-    """ infinite loop """
+    """Infinite loop - create XMPP bot and connect it to server.
+    """
     try:
-        conn = connect()
-        while conn and conn.Process(1):
-            pass
+        xmpp = TranslitBot(USER, PASSWORD)
+        xmpp.register_plugin('xep_0030') # Service Discovery
+        xmpp.register_plugin('xep_0199') # XMPP Ping
+        #~ xmpp.register_plugin('xep_0004') # Data Forms
+        #~ xmpp.register_plugin('xep_0060') # PubSub
+
+        if xmpp.connect(): # if xmpp.connect(('talk.google.com', 5222)):
+            print("connected, process messages...")
+            xmpp.process(block=True)
+            print("xmpp.process done")
+        else:
+            print("unable to connect.")
+
     except (KeyboardInterrupt, SystemExit):
         print u'shutdown...'
         return
     except:
-        print u'xmpp exception, restart after pause...'
+        print u'app exception, restart after pause...'
         traceback.print_exc(file=sys.stderr)
+
     # loop
     print u"will wait and try again..."
     time.sleep(61)
@@ -175,9 +196,6 @@ def doDocTest():
     ''' http://docs.python.org/library/doctest.html
     http://stackoverflow.com/questions/1733414/how-do-i-include-unicode-strings-in-python-doctests
     '''
-    #~ import sys
-    #~ reload(sys)
-    #~ sys.setdefaultencoding("UTF-8")
     import doctest
     doctest.testmod(verbose=True)
 #def doDocTest():
@@ -188,7 +206,7 @@ if __name__ == "__main__":
     try:
         doDocTest()
         print 'Done.'
-    except Exception, e:
+    except Exception as e:
         print 'Error, program failed:'
         traceback.print_exc(file=sys.stderr)
     print time.strftime('%Y-%m-%d %H:%M:%S')

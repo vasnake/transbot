@@ -1,3 +1,6 @@
+2014-08-17
+    * SleekXMPP library used instead of xmpppy.
+
 2014-01-08
     * Install instructions for virtualenv; user name and password from os.env; identation fix.
 

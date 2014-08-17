@@ -18,8 +18,6 @@ Install package using setuptools, virtualenv::
     cd transbot
     virtualenv --python=python2.7 env
     source env/bin/activate
-    wget http://downloads.sourceforge.net/project/xmpppy/xmpppy/0.5.0-rc1/xmpppy-0.5.0rc1.tar.gz
-    pip install ./xmpppy-0.5.0rc1.tar.gz
     pip install git+git://github.com/vasnake/transbot.git@master
     # or download package and exec
     python setup.py install
@@ -53,11 +51,6 @@ For detaching program from console (daemon mode) you can use screen command.
 For example::
 
     screen -d -R transbot
-
-TODO
-----
-
-Shift to SleekXMPP.
 
 Encoders
 --------
